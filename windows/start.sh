@@ -66,7 +66,10 @@ if [ $VM_EXISTS_CODE -eq 1 ]; then
   if [ "${NO_PROXY}" ]; then
     PROXY_ENV="$PROXY_ENV --engine-env NO_PROXY=$NO_PROXY"
   fi
-  "${DOCKER_MACHINE}" create -d virtualbox $PROXY_ENV "${VM}"
+  nproc=$(nproc)
+  mem=$(grep -w MemTotal /proc/meminfo | sed -e 's/MemTotal:\s*//' -e 's/\s*kB//')
+  mem=$((mem/1024))
+  "${DOCKER_MACHINE}" create -d virtualbox --virtualbox-cpu-count=$nproc --virtualbox-memory=$mem --virtualbox-disk-size=30000 $PROXY_ENV "${VM}"
 fi
 
 STEP="Checking status on $VM"
