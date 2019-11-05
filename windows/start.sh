@@ -3,7 +3,7 @@
 trap '[ "$?" -eq 0 ] || read -p "Looks like something went wrong in step ´$STEP´... Press any key to continue..."' EXIT
 
 #Quick Hack: used to convert e.g. "C:\Program Files\Docker Toolbox" to "/c/Program Files/Docker Toolbox"
-win_to_unix_path(){ 
+win_to_unix_path(){
 	wd="$(pwd)"
 	cd "$1"
 		the_path="$(pwd)"
@@ -68,7 +68,7 @@ if [ $VM_EXISTS_CODE -eq 1 ]; then
   fi
   nproc=$(nproc)
   mem=$(grep -w MemTotal /proc/meminfo | sed -e 's/MemTotal:\s*//' -e 's/\s*kB//')
-  mem=$((mem/1024))
+  mem=$((mem/1024/2))
   "${DOCKER_MACHINE}" create -d virtualbox --virtualbox-cpu-count=$nproc --virtualbox-memory=$mem --virtualbox-disk-size=30000 $PROXY_ENV "${VM}"
 fi
 
@@ -101,7 +101,7 @@ EOF
 echo -e "${BLUE}docker${NC} is configured to use the ${GREEN}${VM}${NC} machine with IP ${GREEN}$("${DOCKER_MACHINE}" ip ${VM})${NC}"
 echo "For help getting started, check out the docs at https://docs.docker.com"
 echo
-echo 
+echo
 #cd #Bad: working dir should be whatever directory was invoked from rather than fixed to the Home folder
 
 docker () {
